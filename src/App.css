@@ -1,42 +1,249 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+body{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "DM Sans";
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+/*Header*/
+.header{
+  width: 100%;
+  height: 60px;
+  background-color: rgba(255, 255, 255, 0.50);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgb(234, 234, 234);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.comp{
+  width: 20%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.complogo{
+  width: 25px;
+}
+.compname{
+  font-size: 20px;
+  font-weight: 600;
+  margin-left: 12px;
+}
+.links{
+  width: 60%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.link{
+  font-size: 12px;
+  color: rgb(65, 65, 65);
+  font-weight: 500;
+  margin-left: 12px;
+  margin-right: 12px;
+  cursor: pointer;
+}
+.link:hover{
+  color: black;
+
+}
+.buttons{
+  width: 20%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.loginbutton{
+  font-size: 14px;
+  margin-left: 20px;
+  margin-right: 20px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.registerbutton{
+background-color: rgb(0, 64, 255);
+padding-left: 30px;
+padding-right: 20px;
+padding-bottom: 8px;
+padding-top: 8px;
+border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.registerbutton:hover{
+  background-color: rgb(0, 37, 148);
+  transition: 0.3s;
+}
+.arrow-down-blue{
+  width: 20px;
+  margin-left: 8px;
+}
+.menuicon{
+  display: none;
+}
+.menuiconimg{
+  display: none;
+}
+.menudiv{
+  display: none;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+
+@media (max-width: 1000px) {
+  .header{
+    width: 100%;
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.50);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgb(234, 234, 234);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-  to {
-    transform: rotate(360deg);
+  .comp{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
   }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  .complogo{
+    width: 25px;
+    margin-left: 25px;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+  .compname{
+    font-size: 20px;
+    font-weight: 600;
+    margin-left: 12px;
+  }
+  .links{
+    width: 0%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+  }
+  .link{
+    font-size: 12px;
+    color: rgb(65, 65, 65);
+    font-weight: 500;
+    margin-left: 12px;
+    margin-right: 12px;
+    cursor: pointer;
+  }
+  .link:hover{
+    color: black;
+  
+  }
+  .buttons{
+    width: 0%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+  }
+  .loginbutton{
+    font-size: 14px;
+    margin-left: 20px;
+    margin-right: 20px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .registerbutton{
+  background-color: rgb(0, 64, 255);
+  padding-left: 30px;
+  padding-right: 20px;
+  padding-bottom: 8px;
+  padding-top: 8px;
+  border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 600;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .registerbutton:hover{
+    background-color: rgb(0, 37, 148);
+    transition: 0.3s;
+  }
+  .arrow-down-blue{
+    width: 20px;
+    margin-left: 8px;
+  }
+  .menuicon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 25px;
+  }
+  .menuiconimg{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+  }
+  .menudiv {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.692);
+    visibility: hidden; /* Initially hidden */
+    opacity: 0; /* Invisible */
+    transition: opacity 0.3s ease; /* Smooth fade-in/out */
+  }
+  
+  .menudiv.visible {
+    visibility: visible;
+    opacity: 1; /* Fully visible when active */
+  }
+  
+  .menupage {
+    width: 80%;
+    height: 100%;
+    background-color: white;
+    position: absolute;
+    right: -80%; /* Start off-screen */
+    transition: right 0.3s ease; /* Smooth slide-in/out */
+  }
+  
+  .menupage.visible {
+    right: 0; /* Slide in */
+  }
+  
+  .closebtn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    color: black;
+  }
+    
 }
