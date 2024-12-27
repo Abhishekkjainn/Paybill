@@ -19,6 +19,7 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 100;
 }
 .comp{
   width: 20%;
@@ -205,15 +206,100 @@ border-radius: 8px;
   color: grey;
   margin-top: 8px;
 }
+.page3{
+  width: 100%;
+  height: auto;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.page3tag{
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 40px;
+  border: 2px solid rgb(0, 64, 255);
+  background-color: rgba(0, 64, 255, 0.182);
+  color: rgb(0, 64, 255);
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.circle-small{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgb(0, 64, 255);
+  margin-right: 10px;
+}
+.page3head{
+  font-size: 48px;
+  color: black;
+  font-weight: 600;
+  margin-top: 20px;
+}
+.featurediv{
+  width: 100%;
+  height: auto;
+  margin-top: 50px;
+}
 
-
-
-
-
-
-
-
-
+/*Feature card*/
+.feature{
+  width: 350px;
+  min-height: 300px;
+  height: auto;
+  padding-bottom: 30px;
+  background-color: rgb(188, 185, 0);
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 20px;
+}
+.feature-blue{
+  background-color: rgb(0, 64, 255);
+  color: white;
+}
+.feature-orange{
+  background-color: orange;
+}
+.feature-green{
+  background-color: greenyellow;
+}
+.anim{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.lottieanim{
+  margin-left: 0px;
+}
+.featurehead{
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  margin-left: 30px;
+  margin-right: 30px;
+  transform: translateY(-10px);
+}
+.featuredesc{
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.875);
+  font-weight:500;
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 10px;
+  text-align: center;
+  transform: translateY(-10px);
+}
 
 
 
@@ -474,6 +560,104 @@ border-radius: 8px;
   color: grey;
   margin-top: 8px;
   /* display: none; */
+}
+
+/*Page3*/
+.page3{
+  width: 100%;
+  height: auto;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.page3tag{
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 40px;
+  border: 2px solid rgb(0, 64, 255);
+  background-color: rgba(0, 64, 255, 0.182);
+  color: rgb(0, 64, 255);
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  scale: 0.8;
+}
+.circle-small{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgb(0, 64, 255);
+  margin-right: 10px;
+}
+.page3head{
+  font-size: 36px;
+  color: black;
+  font-weight: 600;
+  margin-top: 20px;
+}
+.featurediv{
+  width: 100%;
+  height: auto;
+  margin-top: 50px;
+}
+
+/*Feature card*/
+.feature{
+  width: 300px;
+  min-height: 280px;
+  height: auto;
+  padding-bottom: 30px;
+  background-color: rgb(188, 185, 0);
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0px;
+  scale: 0.9;
+}
+.feature-blue{
+  background-color: rgb(0, 64, 255);
+  color: white;
+}
+.feature-orange{
+  background-color: orange;
+}
+.feature-green{
+  background-color: greenyellow;
+}
+.anim{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.lottieanim{
+  margin-left: 0px;
+}
+.featurehead{
+  font-size: 18px;
+  font-weight: 600;
+  color: black;
+  margin-left: 20px;
+  margin-right: 20px;
+  transform: translateY(-10px);
+}
+.featuredesc{
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.875);
+  font-weight:500;
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 10px;
+  text-align: center;
+  transform: translateY(-10px);
 }
 
 
