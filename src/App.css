@@ -157,6 +157,54 @@ border-radius: 8px;
 }
 
 
+/*Page2*/
+.page2{
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 20px;
+}
+.banner{
+  width: 60%;
+  height: 120px;
+  border: 1px solid grey;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(-20px);
+  overflow: hidden;
+  
+}
+.bannerimg{
+  height: 100%;
+  width: 180px;
+  /* aspect-ratio: 1.5/1; */
+  background-image: url('/bill.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.bannercontent{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.bannerhead{
+  font-size: 20px;
+  font-weight: 600;
+}
+.bannerdesc{
+  font-size: 12px;
+  color: grey;
+  margin-top: 8px;
+}
 
 
 
@@ -375,6 +423,56 @@ border-radius: 8px;
   font-weight: 600;
   margin-top: 20px;
   margin-left: 0;
+}
+
+
+/*Page2*/
+.page2{
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 20px;
+}
+.banner{
+  width: 90%;
+  height: 140px;
+  border: 1px solid grey;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(-10px);
+  overflow: hidden;
+  
+}
+.bannerimg{
+  height: 100%;
+  width:35%;
+  /* aspect-ratio: 1.5/1; */
+  background-image: url('/bill.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.bannercontent{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.bannerhead{
+  font-size: 14px;
+  font-weight: 600;
+}
+.bannerdesc{
+  font-size: 10px;
+  color: grey;
+  margin-top: 8px;
 }
 
 
