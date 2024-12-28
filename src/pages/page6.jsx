@@ -12,17 +12,17 @@ export default function Page6() {
           today and transform the way you bill!
         </div>
         <div className="inputdiv">
-          <div class="input-wrapper">
+          <div className="input-wrapper">
             <input
               placeholder="xyz@gmail.com"
-              class="input"
+              className="input"
               name="text"
               type="text"
             />
-            <button class="Subscribe-btn">
+            <button className="Subscribe-btn">
               Get Notified
               <svg
-                class="arrow"
+                className="arrow"
                 viewBox="0 0 38 15"
                 height="20"
                 width="20"

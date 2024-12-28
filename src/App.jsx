@@ -4,15 +4,19 @@ import Header from './components/header';
 import Page6 from './pages/page6';
 import Footer from './components/footer';
 import Home from './homepage';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import RegisterVendor from './pages/registervendor';
 
 function App() {
   return (
-    <>
+    <Router>
       <Header />
-      <Home />
-      <Page6 />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/register" element={<RegisterVendor />} />
+      </Routes>
       <Footer />
-    </>
+    </Router>
   );
 }
 
