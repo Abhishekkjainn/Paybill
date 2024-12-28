@@ -18,8 +18,8 @@ export default function Page5() {
       </div>
 
       {/* Section Header */}
-      <div className="page3head">
-        Frequently Asked
+      <div className="page3head page5head">
+        Frequently Asked <br />
         <span className="italics blue">
           <i> Questions.</i>
         </span>
@@ -28,7 +28,7 @@ export default function Page5() {
         <AccordionItem className="accordionitem">
           <AccordionItemHeading className="accordionitemheading">
             <AccordionItemButton>
-              <span className="question">What is this platform for?</span>
+              What is this platform for?
             </AccordionItemButton>
           </AccordionItemHeading>
           <AccordionItemPanel>
