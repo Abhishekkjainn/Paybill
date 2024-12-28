@@ -418,11 +418,13 @@ border-radius: 8px;
     visibility: hidden; /* Initially hidden */
     opacity: 0; /* Invisible */
     transition: opacity 0.3s ease; /* Smooth fade-in/out */
+    z-index: 101;
   }
   
   .menudiv.visible {
     visibility: visible;
     opacity: 1; /* Fully visible when active */
+  
   }
   
   .menupage {
@@ -430,6 +432,7 @@ border-radius: 8px;
     height: 100%;
     background-color: white;
     position: absolute;
+    z-index: 101;
     right: -80%; /* Start off-screen */
     transition: right 0.3s ease; /* Smooth slide-in/out */
   }
@@ -644,14 +647,14 @@ border-radius: 8px;
 .featurehead{
   font-size: 18px;
   font-weight: 600;
-  color: black;
+  color: white;
   margin-left: 20px;
   margin-right: 20px;
   transform: translateY(-10px);
 }
 .featuredesc{
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.875);
+  color: rgba(255, 255, 255, 0.875);
   font-weight:500;
   margin-left: 30px;
   margin-right: 30px;
