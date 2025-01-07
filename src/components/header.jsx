@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 export default function Header() {
   const [menuVisible, setMenuVisible] = useState(false);
 
@@ -8,32 +9,36 @@ export default function Header() {
   return (
     <>
       <div className="header">
-        <div className="comp">
+        <Link to={'/'} className="comp linktag">
           <img
             src="./superbill-blue.png"
             alt="superbill"
             className="complogo"
           />
           <div className="compname">SuperBill</div>
-        </div>
+        </Link>
         <div className="links">
-          <div className="link">Home</div>
-          <div className="link">Get Bills</div>
-          <div className="link">About Us</div>
-          <div className="link">Features</div>
-          <div className="link">FAQ's</div>
-          <div className="link">Contact</div>
+          <Link to={'/'} className="link linktag">
+            Home
+          </Link>
+          <Link to={'/viewbills'} className="link linktag">
+            Get Bills
+          </Link>
+          <div className="link linktag">About Us</div>
+          <div className="link linktag">Features</div>
+          <div className="link linktag">FAQ's</div>
+          <div className="link linktag">Contact</div>
         </div>
         <div className="buttons">
           <div className="loginbutton">Login</div>
-          <div className="registerbutton">
+          <Link to={'/register'} className="registerbutton linktag">
             Register{' '}
             <img
               src="/arrow-down-blue.png"
               alt="Arrow"
               className="arrow-down-blue"
             />
-          </div>
+          </Link>
         </div>
         <div className="menuicon" onClick={toggleMenu}>
           <img src="/menuicon.png" alt="Menu icon" className="menuiconimg" />

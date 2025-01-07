@@ -6,6 +6,7 @@ import Footer from './components/footer';
 import Home from './homepage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import RegisterVendor from './pages/registervendor';
+import ViewBills from './pages/viewbills';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<RegisterVendor />} />
+        <Route path="/viewbills" element={<ViewBills />} />
       </Routes>
       <Footer />
     </Router>
