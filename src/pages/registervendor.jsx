@@ -1,5 +1,62 @@
 import React, { useState } from 'react';
 
+const FormInputGroup = ({
+  label,
+  type,
+  value,
+  onChange,
+  placeholder,
+  icon,
+}) => (
+  <div className="group">
+    <img src={icon} alt={label} className="icon" />
+    <input
+      className="input"
+      type={type}
+      placeholder={placeholder}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    />
+  </div>
+);
+
+const ReviewInfo = ({ formData }) => {
+  const logolink = formData.logoLink;
+
+  // Filter out 'logoLink' from the formData
+  const filteredData = Object.entries(formData).filter(
+    ([key]) => key !== 'logoLink'
+  );
+
+  return (
+    <div className="review">
+      <div className="review-card">
+        <h3 className="review-title">
+          {logolink ? (
+            <img className="logoimg" src={logolink} alt="Business Logo" />
+          ) : (
+            <span>No Logo Available</span> // Fallback message if no logo is available
+          )}
+          {`${formData.businessName} - ${formData.businessType}`}
+        </h3>
+        <div className="review-details">
+          {filteredData.map(([key, value]) => (
+            <div key={key} className="review-row">
+              <span className="review-label">
+                {key
+                  .replace(/([A-Z])/g, ' $1') // Add spaces before uppercase letters
+                  .replace(/^./, (str) => str.toUpperCase())}
+                :
+              </span>
+              <span className="review-value">{value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function RegisterVendor() {
   const [index, setIndex] = useState(1);
   const [formData, setFormData] = useState({
@@ -59,9 +116,8 @@ export default function RegisterVendor() {
     }
   };
 
-  const decreaseIndex = () => {
+  const decreaseIndex = () =>
     setIndex((prevIndex) => Math.max(prevIndex - 1, 1));
-  };
 
   const resetForm = () => {
     setFormData({
@@ -82,16 +138,12 @@ export default function RegisterVendor() {
     closeModal();
   };
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
+  const openModal = () => setIsModalOpen(true);
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  const closeModal = () => setIsModalOpen(false);
 
   const handleChange = (field, value) => {
-    setFormData({ ...formData, [field]: value });
+    setFormData((prevData) => ({ ...prevData, [field]: value }));
   };
 
   return (
@@ -124,210 +176,139 @@ export default function RegisterVendor() {
             </div>
           </div>
         </div>
-        {index === 1 ? (
-          <div className="forminputs forminput1">
-            <div className="group nameinput">
-              <img src="/user.png" alt="user" className="icon" />
-              <input
-                className="input"
-                type="text"
-                placeholder="Enter Your Name"
-                value={formData.name}
-                onChange={(e) => handleChange('name', e.target.value)}
-              />
-            </div>
+
+        {index === 1 && (
+          <div className="forminputs">
+            <FormInputGroup
+              label="Name"
+              type="text"
+              value={formData.name}
+              onChange={(value) => handleChange('name', value)}
+              placeholder="Enter Your Name"
+              icon="/user.png"
+            />
             <div className="space"></div>
-            <div className="group phoneinput">
-              <img src="/phone.png" alt="phone" className="icon" />
-              <input
-                className="input"
-                type="number"
-                placeholder="Enter Your Phone No."
-                value={formData.phone}
-                onChange={(e) => handleChange('phone', e.target.value)}
-              />
-            </div>
-            <div className="group phoneinput">
-              <img src="/email.png" alt="email" className="icon" />
-              <input
-                className="input"
-                type="email"
-                placeholder="Enter Your Email."
-                value={formData.email}
-                onChange={(e) => handleChange('email', e.target.value)}
-              />
-            </div>
-          </div>
-        ) : index === 2 ? (
-          <div className="forminputs forminput2">
-            <div className="group businessnameinput">
-              <img src="/business.png" alt="Business name" className="icon" />
-              <input
-                className="input"
-                type="text"
-                placeholder="Enter Business Name"
-                value={formData.businessName}
-                onChange={(e) => handleChange('businessName', e.target.value)}
-              />
-            </div>
+            <FormInputGroup
+              label="Phone"
+              type="number"
+              value={formData.phone}
+              onChange={(value) => handleChange('phone', value)}
+              placeholder="Enter Your Phone No."
+              icon="/phone.png"
+            />
             <div className="space"></div>
-            <div className="group businesstypeinput">
-              <img
-                src="/businesstype.png"
-                alt="business type"
-                className="icon"
-              />
-              <input
-                className="input"
-                type="text"
-                placeholder="Enter Business type."
-                value={formData.businessType}
-                onChange={(e) => handleChange('businessType', e.target.value)}
-              />
-            </div>
-            <div className="group gstinput">
-              <img src="/gst.png" alt="gst" className="icon" />
-              <input
-                className="input"
-                type="text"
-                placeholder="Enter GST Number."
-                value={formData.gst}
-                onChange={(e) => handleChange('gst', e.target.value)}
-              />
-            </div>
-            <div className="space"></div>
-            <div className="group businessregnoinput">
-              <img
-                src="/registration.png"
-                alt="registration number"
-                className="icon"
-              />
-              <input
-                className="input"
-                type="text"
-                placeholder="Enter Business Reg Number."
-                value={formData.businessRegNo}
-                onChange={(e) => handleChange('businessRegNo', e.target.value)}
-              />
-            </div>
-            <div className="group logolinkinput">
-              <img src="/logo.png" alt="logolink" className="icon" />
-              <input
-                className="input"
-                type="text"
-                placeholder="Enter Business Logo Link."
-                value={formData.logoLink}
-                onChange={(e) => handleChange('logoLink', e.target.value)}
-              />
-            </div>
-          </div>
-        ) : index === 3 ? (
-          <div className="forminputs forminput2">
-            <div className="group businessnameinput">
-              <img src="/address.png" alt="Business Address" className="icon" />
-              <input
-                className="input"
-                type="text"
-                placeholder="Enter Business Address."
-                value={formData.address}
-                onChange={(e) => handleChange('address', e.target.value)}
-              />
-            </div>
-            <div className="space"></div>
-            <div className="group businessstateinput">
-              <img src="/state.png" alt="business state" className="icon" />
-              <input
-                className="input"
-                type="text"
-                placeholder="Enter Business State."
-                value={formData.state}
-                onChange={(e) => handleChange('state', e.target.value)}
-              />
-            </div>
-            <div className="group cityinput">
-              <img src="/city.png" alt="city" className="icon" />
-              <input
-                className="input"
-                type="text"
-                placeholder="Enter City Name."
-                value={formData.city}
-                onChange={(e) => handleChange('city', e.target.value)}
-              />
-            </div>
-            <div className="space"></div>
-            <div className="group picondeinput">
-              <img src="/postalcode.png" alt="postal Code" className="icon" />
-              <input
-                className="input"
-                type="number"
-                placeholder="Enter Pincode."
-                value={formData.pincode}
-                onChange={(e) => handleChange('pincode', e.target.value)}
-              />
-            </div>
-          </div>
-        ) : (
-          <div className="review">
-            <div className="review-card">
-              <h3 className="review-title">
-                {formData.businessName + ' - ' + formData.businessType}
-              </h3>
-              {/* <p className="review-subtitle">{formData.businessType}</p> */}
-              <div className="review-details">
-                <div className="review-row">
-                  <span className="review-label">Name:</span>
-                  <span className="review-value">{formData.name}</span>
-                </div>
-                <div className="review-row">
-                  <span className="review-label">Phone:</span>
-                  <span className="review-value">{formData.phone}</span>
-                </div>
-                <div className="review-row">
-                  <span className="review-label">Email:</span>
-                  <span className="review-value">{formData.email}</span>
-                </div>
-                <div className="review-row">
-                  <span className="review-label">GST:</span>
-                  <span className="review-value">{formData.gst}</span>
-                </div>
-                <div className="review-row">
-                  <span className="review-label">Registration No:</span>
-                  <span className="review-value">{formData.businessRegNo}</span>
-                </div>
-                <div className="review-row">
-                  <span className="review-label">Logo Link:</span>
-                  <span className="review-value">{formData.logoLink}</span>
-                </div>
-                <div className="review-row">
-                  <span className="review-label">Address:</span>
-                  <span className="review-value">{formData.address}</span>
-                </div>
-                <div className="review-row">
-                  <span className="review-label">State:</span>
-                  <span className="review-value">{formData.state}</span>
-                </div>
-                <div className="review-row">
-                  <span className="review-label">City:</span>
-                  <span className="review-value">{formData.city}</span>
-                </div>
-                <div className="review-row">
-                  <span className="review-label">Pincode:</span>
-                  <span className="review-value">{formData.pincode}</span>
-                </div>
-              </div>
-            </div>
+            <FormInputGroup
+              label="Email"
+              type="email"
+              value={formData.email}
+              onChange={(value) => handleChange('email', value)}
+              placeholder="Enter Your Email."
+              icon="/email.png"
+            />
           </div>
         )}
 
+        {index === 2 && (
+          <div className="forminputs">
+            <FormInputGroup
+              label="Business Name"
+              type="text"
+              value={formData.businessName}
+              onChange={(value) => handleChange('businessName', value)}
+              placeholder="Enter Business Name"
+              icon="/business.png"
+            />
+            <div className="space"></div>
+            <FormInputGroup
+              label="Business Type"
+              type="text"
+              value={formData.businessType}
+              onChange={(value) => handleChange('businessType', value)}
+              placeholder="Enter Business Type"
+              icon="/businesstype.png"
+            />
+            <div className="space"></div>
+            <FormInputGroup
+              label="GST"
+              type="text"
+              value={formData.gst}
+              onChange={(value) => handleChange('gst', value)}
+              placeholder="Enter GST Number"
+              icon="/gst.png"
+            />
+            <div className="space"></div>
+            <FormInputGroup
+              label="Business Reg Number"
+              type="text"
+              value={formData.businessRegNo}
+              onChange={(value) => handleChange('businessRegNo', value)}
+              placeholder="Enter Business Reg Number"
+              icon="/registration.png"
+            />
+            <div className="space"></div>
+            <FormInputGroup
+              label="Logo Link"
+              type="text"
+              value={formData.logoLink}
+              onChange={(value) => handleChange('logoLink', value)}
+              placeholder="Enter Logo Link"
+              icon="/logo.png"
+            />
+          </div>
+        )}
+
+        {index === 3 && (
+          <div className="forminputs">
+            <FormInputGroup
+              label="Address"
+              type="text"
+              value={formData.address}
+              onChange={(value) => handleChange('address', value)}
+              placeholder="Enter Address"
+              icon="/address.png"
+            />
+            <div className="space"></div>
+            <FormInputGroup
+              label="State"
+              type="text"
+              value={formData.state}
+              onChange={(value) => handleChange('state', value)}
+              placeholder="Enter State"
+              icon="/state.png"
+            />
+            <div className="space"></div>
+            <FormInputGroup
+              label="City"
+              type="text"
+              value={formData.city}
+              onChange={(value) => handleChange('city', value)}
+              placeholder="Enter City"
+              icon="/city.png"
+            />
+            <div className="space"></div>
+            <FormInputGroup
+              label="Pincode"
+              type="number"
+              value={formData.pincode}
+              onChange={(value) => handleChange('pincode', value)}
+              placeholder="Enter Pincode"
+              icon="/postalcode.png"
+            />
+          </div>
+        )}
+
+        {index === 4 && <ReviewInfo formData={formData} />}
+
         <div className="formbuttons">
           <div className="formbutton" onClick={increaseIndex}>
-            {index == 4 ? 'Submit' : 'Next'}
+            {index === 4 ? 'Submit' : 'Next'}
           </div>
           <div className="formbuttonsec" onClick={openModal}>
             Reset
           </div>
         </div>
       </div>
+
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal">
