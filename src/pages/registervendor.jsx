@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import Lottie from 'react-lottie-player';
 const FormInputGroup = ({
   label,
   type,
@@ -74,6 +74,31 @@ export default function RegisterVendor() {
     pincode: '',
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [statusModal, setStatusModal] = useState(false);
+  const [loader, setLoader] = useState(null);
+  const [done, setDone] = useState(null);
+  const [failed, setfailed] = useState(null);
+  const [statusData, setStatusData] = useState({
+    success: false,
+    anim: done,
+    message: 'You Are Now A Super-Vendor.',
+    title: 'Congratulations!',
+  });
+
+  useEffect(() => {
+    fetch('/loader.json')
+      .then((response) => response.json())
+      .then((data) => setLoader(data));
+
+    fetch('/done.json')
+      .then((response) => response.json())
+      .then((data) => setDone(data));
+
+    fetch('/failed.json')
+      .then((response) => response.json())
+      .then((data) => setfailed(data));
+  }, []);
 
   const validateFields = () => {
     switch (index) {
@@ -144,6 +169,88 @@ export default function RegisterVendor() {
 
   const handleChange = (field, value) => {
     setFormData((prevData) => ({ ...prevData, [field]: value }));
+  };
+
+  const Submitregs = async () => {
+    const {
+      name,
+      phone,
+      email,
+      businessName,
+      businessType,
+      gst,
+      businessRegNo,
+      logoLink,
+      address,
+      state,
+      city,
+      pincode,
+    } = formData;
+
+    // Construct the API URL using formData
+    setIsLoading(true);
+    const apiUrl = `https://superbill-api.vercel.app/register/vendorname=${encodeURIComponent(
+      name
+    )}/vendoremail=${encodeURIComponent(
+      email
+    )}/vendorphone=${encodeURIComponent(
+      phone
+    )}/businessname=${encodeURIComponent(
+      businessName
+    )}/businesstype=${encodeURIComponent(
+      businessType
+    )}/gstno=${encodeURIComponent(gst)}/businessregno=${encodeURIComponent(
+      businessRegNo
+    )}/logolink=${encodeURIComponent(logoLink)}/address=${encodeURIComponent(
+      address
+    )}/state=${encodeURIComponent(state)}/city=${encodeURIComponent(
+      city
+    )}/pincode=${encodeURIComponent(pincode)}`;
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setIsLoading(false);
+        setStatusData({
+          success: true,
+          anim: done,
+          message: 'You Are Now A Super-Vendor.',
+          title: 'Congratulations!',
+        });
+        setStatusModal(true);
+        setTimeout(() => {
+          setStatusModal(false);
+          //Navigate to Main
+        }, 4000);
+        console.log('Success');
+      } else {
+        setIsLoading(false);
+        setStatusData({
+          success: false,
+          anim: failed,
+          message: data.message,
+          title: 'Oops!',
+        });
+        setStatusModal(true);
+
+        console.log('failed' + data.message);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      setStatusData({
+        success: false,
+        anim: failed,
+        message: error.message,
+        title: 'Oops!',
+      });
+      setStatusModal(true);
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -300,7 +407,10 @@ export default function RegisterVendor() {
         {index === 4 && <ReviewInfo formData={formData} />}
 
         <div className="formbuttons">
-          <div className="formbutton" onClick={increaseIndex}>
+          <div
+            className="formbutton"
+            onClick={index === 4 ? Submitregs : increaseIndex}
+          >
             {index === 4 ? 'Submit' : 'Next'}
           </div>
           <div className="formbuttonsec" onClick={openModal}>
@@ -324,6 +434,36 @@ export default function RegisterVendor() {
                 Cancel
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="loaderdiv">
+            <Lottie
+              className="loaderanim"
+              loop
+              animationData={loader}
+              play
+              style={{ width: 100, height: 100 }}
+            />
+          </div>
+        </div>
+      )}
+
+      {statusModal && (
+        <div className="statusmodal-overlay">
+          <div className="statusmodal">
+            <Lottie
+              className="statusanim"
+              loop
+              animationData={statusData.anim}
+              play
+              style={{ width: 200, height: 200 }}
+            />
+            <div className="statushead">{statusData.title}</div>
+            <div className="statusmessage">{statusData.message}</div>
           </div>
         </div>
       )}
