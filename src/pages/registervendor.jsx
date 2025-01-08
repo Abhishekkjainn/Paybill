@@ -225,7 +225,7 @@ export default function RegisterVendor() {
         setStatusModal(true);
         setTimeout(() => {
           setStatusModal(false);
-          //Navigate to Main
+          //Navigate to Main or SuperVendor Platform.
         }, 4000);
         console.log('Success');
       } else {
@@ -237,6 +237,11 @@ export default function RegisterVendor() {
           title: 'Oops!',
         });
         setStatusModal(true);
+        setTimeout(() => {
+          setStatusModal(false);
+          N;
+          //Navigate to Main or SuperVendor Platform.
+        }, 4000);
 
         console.log('failed' + data.message);
       }
