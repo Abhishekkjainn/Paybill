@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Lottie from 'react-lottie-player';
+import { useNavigate } from 'react-router-dom';
+
 const FormInputGroup = ({
   label,
   type,
@@ -58,6 +60,7 @@ const ReviewInfo = ({ formData }) => {
 };
 
 export default function RegisterVendor() {
+  const navigate = useNavigate();
   const [index, setIndex] = useState(1);
   const [formData, setFormData] = useState({
     name: '',
@@ -225,7 +228,7 @@ export default function RegisterVendor() {
         setStatusModal(true);
         setTimeout(() => {
           setStatusModal(false);
-          //Navigate to Main or SuperVendor Platform.
+          window.location.replace('https://supervendor.vercel.app');
         }, 4000);
         console.log('Success');
       } else {
