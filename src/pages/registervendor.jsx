@@ -1,480 +1,319 @@
-import React, { useState, useEffect } from 'react';
-import Lottie from 'react-lottie-player';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const FormInputGroup = ({
-  label,
-  type,
-  value,
-  onChange,
-  placeholder,
-  icon,
-}) => (
-  <div className="group">
-    <img src={icon} alt={label} className="icon" />
-    <input
-      className="input"
-      type={type}
-      placeholder={placeholder}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-    />
-  </div>
-);
-
-const ReviewInfo = ({ formData }) => {
-  const logolink = formData.logoLink;
-
-  // Filter out 'logoLink' from the formData
-  const filteredData = Object.entries(formData).filter(
-    ([key]) => key !== 'logoLink'
-  );
-
-  return (
-    <div className="review">
-      <div className="review-card">
-        <h3 className="review-title">
-          {logolink ? (
-            <img className="logoimg" src={logolink} alt="Business Logo" />
-          ) : (
-            <span>No Logo Available</span> // Fallback message if no logo is available
-          )}
-          {`${formData.businessName} - ${formData.businessType}`}
-        </h3>
-        <div className="review-details">
-          {filteredData.map(([key, value]) => (
-            <div key={key} className="review-row">
-              <span className="review-label">
-                {key
-                  .replace(/([A-Z])/g, ' $1') // Add spaces before uppercase letters
-                  .replace(/^./, (str) => str.toUpperCase())}
-                :
-              </span>
-              <span className="review-value">{value}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
 export default function RegisterVendor() {
-  const navigate = useNavigate();
-  const [index, setIndex] = useState(1);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     email: '',
     businessName: '',
-    businessType: '',
-    gst: '',
-    businessRegNo: '',
+    gstNumber: '',
+    registrationNumber: '',
     logoLink: '',
     address: '',
-    state: '',
-    city: '',
-    pincode: '',
-  });
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [statusModal, setStatusModal] = useState(false);
-  const [loader, setLoader] = useState(null);
-  const [done, setDone] = useState(null);
-  const [failed, setfailed] = useState(null);
-  const [statusData, setStatusData] = useState({
-    success: false,
-    anim: done,
-    message: 'You Are Now A Super-Vendor.',
-    title: 'Congratulations!',
+    citystatepincode: '',
   });
 
-  useEffect(() => {
-    fetch('/loader.json')
-      .then((response) => response.json())
-      .then((data) => setLoader(data));
+  const [currentStep, setCurrentStep] = useState(0); // Track the current step
+  const totalSteps = 10; // Total number of steps (including all fields)
+  const [errors, setErrors] = useState({}); // Track validation errors
 
-    fetch('/done.json')
-      .then((response) => response.json())
-      .then((data) => setDone(data));
+  const navigate = useNavigate();
 
-    fetch('/failed.json')
-      .then((response) => response.json())
-      .then((data) => setfailed(data));
-  }, []);
-
-  const validateFields = () => {
-    switch (index) {
-      case 1:
-        if (
-          !formData.name ||
-          !formData.phone.match(/^\d{10}$/) ||
-          !formData.email.includes('@')
-        ) {
-          alert('Please fill all fields correctly in Personal Details.');
-          return false;
-        }
-        break;
-      case 2:
-        if (!formData.businessName || !formData.businessType) {
-          alert('Please fill Business Name and Business Type.');
-          return false;
-        }
-        break;
-      case 3:
-        if (
-          !formData.address ||
-          !formData.state ||
-          !formData.city ||
-          !formData.pincode.match(/^\d{6}$/)
-        ) {
-          alert('Please fill all fields correctly in Location Details.');
-          return false;
-        }
-        break;
-      default:
-        return true;
-    }
-    return true;
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    // Clear the error for the current field
+    setErrors({
+      ...errors,
+      [name]: '',
+    });
   };
 
-  const increaseIndex = () => {
-    if (validateFields()) {
-      setIndex((prevIndex) => Math.min(prevIndex + 1, 4));
+  const handleNextStep = () => {
+    if (validateCurrentStep()) {
+      if (currentStep < totalSteps - 1) {
+        setCurrentStep(currentStep + 1); // Move to the next step
+      }
     }
   };
 
-  const decreaseIndex = () =>
-    setIndex((prevIndex) => Math.max(prevIndex - 1, 1));
+  const handlePrevStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1); // Move to the previous step
+    }
+  };
 
-  const resetForm = () => {
+  const handleResetForm = () => {
     setFormData({
       name: '',
       phone: '',
       email: '',
       businessName: '',
-      businessType: '',
-      gst: '',
-      businessRegNo: '',
+      gstNumber: '',
+      registrationNumber: '',
       logoLink: '',
       address: '',
-      state: '',
-      city: '',
-      pincode: '',
+      citystatepincode: '',
     });
-    setIndex(1);
-    closeModal();
+    setCurrentStep(0); // Reset the step to 0
+    setErrors({}); // Clear any validation errors
   };
 
-  const openModal = () => setIsModalOpen(true);
+  const validateCurrentStep = () => {
+    let isValid = true;
+    const newErrors = {};
 
-  const closeModal = () => setIsModalOpen(false);
-
-  const handleChange = (field, value) => {
-    setFormData((prevData) => ({ ...prevData, [field]: value }));
-  };
-
-  const Submitregs = async () => {
-    const {
-      name,
-      phone,
-      email,
-      businessName,
-      businessType,
-      gst,
-      businessRegNo,
-      logoLink,
-      address,
-      state,
-      city,
-      pincode,
-    } = formData;
-
-    // Construct the API URL using formData
-    setIsLoading(true);
-    const apiUrl = `https://superbill-api.vercel.app/register/vendorname=${encodeURIComponent(
-      name
-    )}/vendoremail=${encodeURIComponent(
-      email
-    )}/vendorphone=${encodeURIComponent(
-      phone
-    )}/businessname=${encodeURIComponent(
-      businessName
-    )}/businesstype=${encodeURIComponent(
-      businessType
-    )}/gstno=${encodeURIComponent(gst)}/businessregno=${encodeURIComponent(
-      businessRegNo
-    )}/logolink=${encodeURIComponent(logoLink)}/address=${encodeURIComponent(
-      address
-    )}/state=${encodeURIComponent(state)}/city=${encodeURIComponent(
-      city
-    )}/pincode=${encodeURIComponent(pincode)}`;
-
-    try {
-      const response = await fetch(apiUrl, {
-        method: 'GET',
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setIsLoading(false);
-        setStatusData({
-          success: true,
-          anim: done,
-          message: 'You Are Now A Super-Vendor.',
-          title: 'Congratulations!',
-        });
-        setStatusModal(true);
-        setTimeout(() => {
-          setStatusModal(false);
-          window.location.replace('https://supervendor.vercel.app');
-        }, 4000);
-        console.log('Success');
-      } else {
-        setIsLoading(false);
-        setStatusData({
-          success: false,
-          anim: failed,
-          message: data.message,
-          title: 'Oops!',
-        });
-        setStatusModal(true);
-        setTimeout(() => {
-          setStatusModal(false);
-          N;
-          //Navigate to Main or SuperVendor Platform.
-        }, 4000);
-
-        console.log('failed' + data.message);
-      }
-    } catch (error) {
-      setIsLoading(false);
-      setStatusData({
-        success: false,
-        anim: failed,
-        message: error.message,
-        title: 'Oops!',
-      });
-      setStatusModal(true);
-      console.error('Error:', error);
+    // Validate based on the current step
+    if (currentStep === 0 && !formData.name) {
+      newErrors.name = 'Name is required';
+      isValid = false;
     }
+    if (
+      currentStep === 1 &&
+      (formData.phone.length !== 10 || isNaN(formData.phone))
+    ) {
+      newErrors.phone = 'Phone number must be exactly 10 digits';
+      isValid = false;
+    }
+    if (currentStep === 2 && !/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Enter a valid email address';
+      isValid = false;
+    }
+    if (currentStep === 3 && !formData.businessName) {
+      newErrors.businessName = 'Business name is required';
+      isValid = false;
+    }
+    if (currentStep === 4 && formData.gstNumber.length !== 15) {
+      newErrors.gstNumber = 'GST number must be exactly 15 characters long';
+      isValid = false;
+    }
+
+    if (currentStep === 7 && !formData.address) {
+      newErrors.address = 'Address is required';
+      isValid = false;
+    }
+    if (currentStep === 8 && !formData.citystatepincode) {
+      newErrors.citystatepincode = 'City, State, and Pincode are required';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
   };
+
+  const isLastStep = currentStep === totalSteps - 1;
 
   return (
     <div className="registerVendorpage">
-      <div className="formcard">
-        <div className="formhead">
-          <div className="formheadtext">
-            {index === 1
-              ? '1. Add Personal Details.'
-              : index === 2
-              ? '2. Add Business Details.'
-              : index === 3
-              ? '3. Add Location Details.'
-              : '4. Review Information.'}
-          </div>
-          <div className="formnavigation">
-            <div className="previous" onClick={decreaseIndex}>
-              <img
-                src="/forward.png"
-                alt="previous arrow"
-                className="prevarrow"
-              />
-            </div>
-            <div className="forward" onClick={increaseIndex}>
-              <img
-                src="/forward.png"
-                alt="Forward arrow"
-                className="forwarrow"
-              />
-            </div>
-          </div>
+      {/* Dynamic form steps */}
+      <div className="formtag">
+        <img
+          src={
+            currentStep === 0 || currentStep === 1 || currentStep === 2
+              ? '/personal.png'
+              : currentStep === 3 ||
+                currentStep === 4 ||
+                currentStep === 5 ||
+                currentStep === 6
+              ? '/businessicon.png'
+              : currentStep === 9
+              ? '/preview.png'
+              : '/location.png'
+          }
+          alt=""
+          className="formtagimage"
+        />
+        <div className="formtagtext">
+          {currentStep === 0 || currentStep === 1 || currentStep === 2
+            ? 'Personal Details'
+            : currentStep === 3 ||
+              currentStep === 4 ||
+              currentStep === 5 ||
+              currentStep === 6
+            ? 'Business Details'
+            : currentStep === 9
+            ? 'Review Information'
+            : 'Location Details'}
         </div>
+      </div>
+      <div className="formheading">
+        {currentStep === 0
+          ? 'What Should we call You?'
+          : currentStep === 1
+          ? 'Enter Your Phone Number !'
+          : currentStep === 2
+          ? 'Enter Your Email Address !'
+          : currentStep === 3
+          ? 'Enter Your Business Name.'
+          : currentStep === 4
+          ? 'Enter GST Number.'
+          : currentStep === 5
+          ? 'Enter Business Registration Number.'
+          : currentStep === 6
+          ? 'Enter Business Logo Link.'
+          : currentStep === 7
+          ? 'Enter Complete Address.'
+          : currentStep === 8
+          ? 'Enter City, State, Pincode'
+          : 'Review Your Details'}
+      </div>
 
-        {index === 1 && (
-          <div className="forminputs">
-            <FormInputGroup
-              label="Name"
-              type="text"
-              value={formData.name}
-              onChange={(value) => handleChange('name', value)}
-              placeholder="Enter Your Name"
-              icon="/user.png"
-            />
-            <div className="space"></div>
-            <FormInputGroup
-              label="Phone"
-              type="number"
-              value={formData.phone}
-              onChange={(value) => handleChange('phone', value)}
-              placeholder="Enter Your Phone No."
-              icon="/phone.png"
-            />
-            <div className="space"></div>
-            <FormInputGroup
-              label="Email"
-              type="email"
-              value={formData.email}
-              onChange={(value) => handleChange('email', value)}
-              placeholder="Enter Your Email."
-              icon="/email.png"
-            />
-          </div>
-        )}
+      {/* Display input based on the current step */}
+      {currentStep === 0 && (
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleInputChange}
+          className="inputregister"
+          autoComplete="on"
+        />
+      )}
+      {errors.name && <div className="error">{errors.name}</div>}
 
-        {index === 2 && (
-          <div className="forminputs">
-            <FormInputGroup
-              label="Business Name"
-              type="text"
-              value={formData.businessName}
-              onChange={(value) => handleChange('businessName', value)}
-              placeholder="Enter Business Name"
-              icon="/business.png"
-            />
-            <div className="space"></div>
-            <FormInputGroup
-              label="Business Type"
-              type="text"
-              value={formData.businessType}
-              onChange={(value) => handleChange('businessType', value)}
-              placeholder="Enter Business Type"
-              icon="/businesstype.png"
-            />
-            <div className="space"></div>
-            <FormInputGroup
-              label="GST"
-              type="text"
-              value={formData.gst}
-              onChange={(value) => handleChange('gst', value)}
-              placeholder="Enter GST Number"
-              icon="/gst.png"
-            />
-            <div className="space"></div>
-            <FormInputGroup
-              label="Business Reg Number"
-              type="text"
-              value={formData.businessRegNo}
-              onChange={(value) => handleChange('businessRegNo', value)}
-              placeholder="Enter Business Reg Number"
-              icon="/registration.png"
-            />
-            <div className="space"></div>
-            <FormInputGroup
-              label="Logo Link"
-              type="text"
-              value={formData.logoLink}
-              onChange={(value) => handleChange('logoLink', value)}
-              placeholder="Enter Logo Link"
-              icon="/logo.png"
-            />
-          </div>
-        )}
+      {currentStep === 1 && (
+        <input
+          type="text"
+          name="phone"
+          value={formData.phone}
+          onChange={handleInputChange}
+          className="inputregister"
+          autoComplete="on"
+        />
+      )}
+      {errors.phone && <div className="error">{errors.phone}</div>}
 
-        {index === 3 && (
-          <div className="forminputs">
-            <FormInputGroup
-              label="Address"
-              type="text"
-              value={formData.address}
-              onChange={(value) => handleChange('address', value)}
-              placeholder="Enter Address"
-              icon="/address.png"
-            />
-            <div className="space"></div>
-            <FormInputGroup
-              label="State"
-              type="text"
-              value={formData.state}
-              onChange={(value) => handleChange('state', value)}
-              placeholder="Enter State"
-              icon="/state.png"
-            />
-            <div className="space"></div>
-            <FormInputGroup
-              label="City"
-              type="text"
-              value={formData.city}
-              onChange={(value) => handleChange('city', value)}
-              placeholder="Enter City"
-              icon="/city.png"
-            />
-            <div className="space"></div>
-            <FormInputGroup
-              label="Pincode"
-              type="number"
-              value={formData.pincode}
-              onChange={(value) => handleChange('pincode', value)}
-              placeholder="Enter Pincode"
-              icon="/postalcode.png"
-            />
-          </div>
-        )}
+      {currentStep === 2 && (
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleInputChange}
+          className="inputregister"
+          autoComplete="on"
+        />
+      )}
+      {errors.email && <div className="error">{errors.email}</div>}
 
-        {index === 4 && <ReviewInfo formData={formData} />}
+      {currentStep === 3 && (
+        <input
+          type="text"
+          name="businessName"
+          value={formData.businessName}
+          onChange={handleInputChange}
+          className="inputregister"
+          autoComplete="on"
+        />
+      )}
+      {errors.businessName && (
+        <div className="error">{errors.businessName}</div>
+      )}
 
-        <div className="formbuttons">
-          <div
-            className="formbutton"
-            onClick={index === 4 ? Submitregs : increaseIndex}
-          >
-            {index === 4 ? 'Submit' : 'Next'}
-          </div>
-          <div className="formbuttonsec" onClick={openModal}>
-            Reset
-          </div>
+      {currentStep === 4 && (
+        <input
+          type="text"
+          name="gstNumber"
+          value={formData.gstNumber}
+          onChange={handleInputChange}
+          className="inputregister"
+          autoComplete="on"
+        />
+      )}
+      {errors.gstNumber && <div className="error">{errors.gstNumber}</div>}
+
+      {currentStep === 5 && (
+        <input
+          type="text"
+          name="registrationNumber"
+          value={formData.registrationNumber}
+          onChange={handleInputChange}
+          className="inputregister"
+          autoComplete="on"
+        />
+      )}
+
+      {currentStep === 6 && (
+        <input
+          type="text"
+          name="logoLink"
+          value={formData.logoLink}
+          onChange={handleInputChange}
+          className="inputregister"
+          autoComplete="on"
+        />
+      )}
+
+      {currentStep === 7 && (
+        <input
+          type="text"
+          name="address"
+          value={formData.address}
+          onChange={handleInputChange}
+          className="inputregister"
+          autoComplete="on"
+        />
+      )}
+      {errors.address && <div className="error">{errors.address}</div>}
+
+      {currentStep === 8 && (
+        <input
+          type="text"
+          name="citystatepincode"
+          value={formData.citystatepincode}
+          onChange={handleInputChange}
+          className="inputregister"
+          placeholder="Enter City, State, Pincode (e.g., Vellore, Tamil Nadu, 632014)"
+          autoComplete="on"
+        />
+      )}
+      {errors.citystatepincode && (
+        <div className="error">{errors.citystatepincode}</div>
+      )}
+
+      {/* Display form review step */}
+      {currentStep === 9 && (
+        <div className="formReview">
+          <ul>
+            {Object.entries(formData).map(([key, value]) => (
+              <li key={key}>
+                <strong>{key.replace(/([A-Z])/g, ' $1')}:</strong> {value}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <div className="buttonssection">
+        <div className="resetbutton" onClick={handleResetForm}>
+          Reset
+        </div>
+        <div className="nextbutton" onClick={handlePrevStep}>
+          <img src="/back.png" alt="" className="arrowsectionback" />
+          Prev
+        </div>
+        <div
+          className="nextbutton"
+          onClick={handleNextStep}
+          disabled={isLastStep} // Disable next button on the last step
+        >
+          {isLastStep ? 'Submit' : 'Next'}{' '}
+          <img src="/next.png" alt="" className="arrowsection" />
         </div>
       </div>
 
-      {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3 className="modal-title">Confirm Reset</h3>
-            <p className="modal-message">
-              Are you sure you want to reset all the data?
-            </p>
-            <div className="modal-buttons">
-              <button className="modal-button confirm" onClick={resetForm}>
-                Yes, Reset
-              </button>
-              <button className="modal-button cancel" onClick={closeModal}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {isLoading && (
-        <div className="loading-overlay">
-          <div className="loaderdiv">
-            <Lottie
-              className="loaderanim"
-              loop
-              animationData={loader}
-              play
-              style={{ width: 100, height: 100 }}
-            />
-          </div>
-        </div>
-      )}
-
-      {statusModal && (
-        <div className="statusmodal-overlay">
-          <div className="statusmodal">
-            <Lottie
-              className="statusanim"
-              loop
-              animationData={statusData.anim}
-              play
-              style={{ width: 200, height: 200 }}
-            />
-            <div className="statushead">{statusData.title}</div>
-            <div className="statusmessage">{statusData.message}</div>
-          </div>
-        </div>
-      )}
+      {/* Pagination */}
+      <div className="pagination">
+        {Array.from({ length: totalSteps }).map((_, index) => (
+          <div
+            key={index}
+            className={`pg ${index === currentStep ? 'active' : ''}`}
+          />
+        ))}
+      </div>
     </div>
   );
 }
