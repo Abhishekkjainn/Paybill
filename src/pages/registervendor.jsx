@@ -33,10 +33,81 @@ export default function RegisterVendor() {
     });
   };
 
+  const handleSubmit = async () => {
+    const {
+      name,
+      phone,
+      email,
+      businessName,
+      gstNumber,
+      registrationNumber,
+      logoLink,
+      address,
+      citystatepincode,
+    } = formData;
+
+    // Split city, state, and pincode
+    const [city, state, pincode] = citystatepincode.split(',');
+
+    // Construct the API URL with URL encoding
+    const apiUrl = `https://superbill-api.vercel.app/register/vendorname=${encodeURIComponent(
+      name
+    )}/vendoremail=${encodeURIComponent(
+      email
+    )}/vendorphone=${encodeURIComponent(
+      phone
+    )}/businessname=${encodeURIComponent(
+      businessName
+    )}/businesstype=${encodeURIComponent(
+      'General' // Replace with actual type if required
+    )}/gstno=${encodeURIComponent(
+      gstNumber
+    )}/businessregno=${encodeURIComponent(
+      registrationNumber
+    )}/logolink=${encodeURIComponent(logoLink)}/address=${encodeURIComponent(
+      address
+    )}/state=${encodeURIComponent(
+      state?.trim() || ''
+    )}/city=${encodeURIComponent(
+      city?.trim() || ''
+    )}/pincode=${encodeURIComponent(pincode?.trim() || '')}`;
+
+    try {
+      // Make the API call
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+      });
+
+      if (!response.ok) {
+        // Handle HTTP errors (e.g., 404, 500)
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+
+      // Parse JSON response
+      const data = await response.json();
+
+      if (data.success) {
+        console.log('Vendor registered successfully:', data);
+        alert('Vendor registered successfully!');
+        navigate('/dashboard'); // Redirect after success
+      } else {
+        console.error('Vendor registration failed:', data.message);
+        alert(`Registration failed: ${data.message}`);
+      }
+    } catch (error) {
+      // Catch network or JSON parsing errors
+      console.error('Error during API call:', error.message);
+      alert(`Error: ${error.message}`);
+    }
+  };
+
+  // Add the handleSubmit call to your final step in handleNextStep
   const handleNextStep = () => {
     if (validateCurrentStep()) {
       if (currentStep < totalSteps - 1) {
-        setCurrentStep(currentStep + 1); // Move to the next step
+        setCurrentStep(currentStep + 1);
+      } else {
+        handleSubmit(); // Call the API when it's the last step
       }
     }
   };
@@ -106,6 +177,94 @@ export default function RegisterVendor() {
   };
 
   const isLastStep = currentStep === totalSteps - 1;
+
+  // const Submitregs = async () => {
+  //   const {
+  //     name,
+  //     phone,
+  //     email,
+  //     businessName,
+  //     businessType,
+  //     gst,
+  //     businessRegNo,
+  //     logoLink,
+  //     address,
+  //     state,
+  //     city,
+  //     pincode,
+  //   } = formData;
+
+  //   // Construct the API URL using formData
+  //   setIsLoading(true);
+  //   const apiUrl = `https://superbill-api.vercel.app/register/vendorname=${encodeURIComponent(
+  //     name
+  //   )}/vendoremail=${encodeURIComponent(
+  //     email
+  //   )}/vendorphone=${encodeURIComponent(
+  //     phone
+  //   )}/businessname=${encodeURIComponent(
+  //     businessName
+  //   )}/businesstype=${encodeURIComponent(
+  //     businessType
+  //   )}/gstno=${encodeURIComponent(gst)}/businessregno=${encodeURIComponent(
+  //     businessRegNo
+  //   )}/logolink=${encodeURIComponent(logoLink)}/address=${encodeURIComponent(
+  //     address
+  //   )}/state=${encodeURIComponent(state)}/city=${encodeURIComponent(
+  //     city
+  //   )}/pincode=${encodeURIComponent(pincode)}`;
+
+  //   try {
+  //     const response = await fetch(apiUrl, {
+  //       method: 'GET',
+  //     });
+
+  //     const data = await response.json();
+
+  //     if (data.success) {
+  //       setIsLoading(false);
+  //       setStatusData({
+  //         success: true,
+  //         anim: done,
+  //         message: 'You Are Now A Super-Vendor.',
+  //         title: 'Congratulations!',
+  //       });
+  //       setStatusModal(true);
+  //       setTimeout(() => {
+  //         setStatusModal(false);
+  //         //Navigate to Main
+  //         //Navigate to Main or SuperVendor Platform.
+  //       }, 4000);
+  //       console.log('Success');
+  //     } else {
+  //       setIsLoading(false);
+  //       setStatusData({
+  //         success: false,
+  //         anim: failed,
+  //         message: data.message,
+  //         title: 'Oops!',
+  //       });
+  //       setStatusModal(true);
+  //       setTimeout(() => {
+  //         setStatusModal(false);
+  //         N;
+  //         //Navigate to Main or SuperVendor Platform.
+  //       }, 4000);
+
+  //       console.log('failed' + data.message);
+  //     }
+  //   } catch (error) {
+  //     setIsLoading(false);
+  //     setStatusData({
+  //       success: false,
+  //       anim: failed,
+  //       message: error.message,
+  //       title: 'Oops!',
+  //     });
+  //     setStatusModal(true);
+  //     console.error('Error:', error);
+  //   }
+  // };
 
   return (
     <div className="registerVendorpage">
