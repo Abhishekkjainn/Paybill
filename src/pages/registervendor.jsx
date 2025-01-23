@@ -70,7 +70,9 @@ export default function RegisterVendor() {
       state?.trim() || ''
     )}/city=${encodeURIComponent(
       city?.trim() || ''
-    )}/pincode=${encodeURIComponent(pincode?.trim() || '')}`;
+    )}/pincode=${encodeURIComponent(
+      pincode?.trim() || ''
+    )}/inventory=null/bills=null`;
 
     try {
       // Make the API call
@@ -89,7 +91,8 @@ export default function RegisterVendor() {
       if (data.success) {
         console.log('Vendor registered successfully:', data);
         alert('Vendor registered successfully!');
-        navigate('/dashboard'); // Redirect after success
+        // navigate('/dashboard'); // Redirect after success
+        window.location.assign('https://supervendor.vercel.app');
       } else {
         console.error('Vendor registration failed:', data.message);
         alert(`Registration failed: ${data.message}`);
